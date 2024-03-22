@@ -64,6 +64,10 @@ void RobotGUI::run() {
   std::string ros_distance = "0";
   ros::NodeHandle nh_gui;
 
+
+  twist_msg.linear.x = 0.0;
+  twist_msg.angular.z = 0.0;
+
   ros::NodeHandle nh_service;
   ros::ServiceClient distance_client =
       nh_service.serviceClient<std_srvs::Trigger>("/get_distance");
@@ -114,6 +118,8 @@ void RobotGUI::run() {
     cvui::printf(frame, 34, 160, 0.4, 0xff0000, "%s",
                  robot_info_msg_.data_field_10.c_str());
 
+    
+    twist_pub_.publish(twist_msg);
     if (cvui::button(frame, 100, 200, " Forward ")) {
       twist_msg.linear.x = twist_msg.linear.x + linear_velocity_step;
       twist_pub_.publish(twist_msg);
